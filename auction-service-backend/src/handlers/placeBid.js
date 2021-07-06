@@ -1,13 +1,23 @@
 import AWS from 'aws-sdk'
 import createErrors from 'http-errors'
 import commonMiddleware from '../lib/commonMiddleware'
+import { getAuctionById } from './getAuction'
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient()
-
+let cached = 0
 async function placeBid(event, context) {
   let updatedAuction
   const { id } = event.pathParameters
   const { amount } = event.body
+
+  const auction = await getAuctionById(id)
+
+  if (amount <= auction.highestBid.amount) {
+    throw new createErrors.Forbidden(
+      `Your bid must be higher than ${auction.highestBid.amount}`
+    )
+  }
+
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,
     Key: { id },
@@ -25,11 +35,6 @@ async function placeBid(event, context) {
     console.error(error)
     throw new createErrors.InternalServerError(error)
   }
-
-  if (!updatedAuction) {
-    throw new createErrors.NotFound(`Auction with ID ${id} not found!`)
-  }
-
   return {
     statusCode: 200,
     body: JSON.stringify(updatedAuction),
