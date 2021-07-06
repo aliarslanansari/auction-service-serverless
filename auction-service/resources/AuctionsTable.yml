@@ -7,5 +7,5 @@ AuctionsTable:
     KeySchema:
       - AttributeName: id
         KeyType: HASH
-    TableName: AuctionsTable
+    TableName: AuctionsTable-${self:provider.stage}
     BillingMode: PAY_PER_REQUEST
