@@ -7,10 +7,10 @@ export async function closeAuction(auction) {
     TableName: process.env.AUCTIONS_TABLE_NAME,
     Key: { id: auction.id },
     UpdateExpression: 'set #status = :status',
-    ExpressionAttributeName: {
-      ':status': 'status',
+    ExpressionAttributeNames: {
+      '#status': 'status',
     },
-    ExpressionAttributeName: {
+    ExpressionAttributeValues: {
       ':status': 'CLOSED',
     },
   }
