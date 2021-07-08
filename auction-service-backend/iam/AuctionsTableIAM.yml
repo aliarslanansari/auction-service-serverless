@@ -5,6 +5,7 @@ AuctionsTableIAM:
     - dynamodb:Scan
     - dynamodb:UpdateItem
     - dynamodb:GetItem
+    - dynamodb:Query
   Resource:
     - ${self:custom.AuctionsTable.arn}
     - !Join [
