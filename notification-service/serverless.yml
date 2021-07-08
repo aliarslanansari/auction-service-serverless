@@ -9,12 +9,11 @@ provider:
   name: aws
   runtime: nodejs12.x
   memorySize: 256
+  region: eu-west-1
   stage: ${opt:stage, 'dev'}
+  iamRoleStatements:
+    - ${file(iam/SendMailIAM.yml):SendMailIAM}
 
 functions:
-  hello:
-    handler: src/handlers/hello.handler
-    events:
-      - http:
-          method: GET
-          path: /hello
+  sendMail:
+    handler: src/handlers/sendMail.handler
