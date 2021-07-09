@@ -22,7 +22,19 @@ export async function closeAuction(auction) {
     seller,
     highestBid: { amount, bidder },
   } = auction
-
+  if (amount === 0) {
+    await sqs
+      .sendMessage({
+        QueueUrl: process.env.MAIL_QUEUE_URL,
+        MessageBody: JSON.stringify({
+          subject: 'No bids on your auction item :(',
+          recipient: seller,
+          body: `Oh no, Your item "${title}" didn't get any bids`,
+        }),
+      })
+      .promise()
+    return
+  }
   const notifySeller = sqs
     .sendMessage({
       QueueUrl: process.env.MAIL_QUEUE_URL,
