@@ -13,9 +13,10 @@ provider:
   region: eu-west-1
   environment:
     AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
-
+    MAIL_QUEUE_URL: ${self:custom.MailQueue.url}
   iamRoleStatements:
     - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
+    - ${file(iam/MailQueueIAM.yml):MailQueueIAM}
 
 resources:
   Resources:
@@ -60,6 +61,9 @@ functions:
     #   - schedule: rate(1 minute)
 
 custom:
+  MailQueue:
+    arn: ${cf:notification-service-${self:provider.stage}.MailQueueArn}
+    url: ${cf:notification-service-${self:provider.stage}.MailQueueUrl}
   authorizer: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth-service-${self:provider.stage}-auth
   AuctionsTable:
     name: !Ref AuctionsTable
