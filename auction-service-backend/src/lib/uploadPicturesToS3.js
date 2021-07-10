@@ -2,7 +2,7 @@ import AWS from 'aws-sdk'
 
 const s3 = new AWS.S3()
 
-export async function uploadPicturesToS3(key, body) {
+async function uploadPicturesToS3(key, body) {
   const result = await s3
     .upload({
       Bucket: process.env.AUCTIONS_BUCKET_NAME,
@@ -14,3 +14,5 @@ export async function uploadPicturesToS3(key, body) {
     .promise()
   return result
 }
+
+export default uploadPicturesToS3
