@@ -1,0 +1,24 @@
+{
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parser": "babel-eslint",
+  "extends": "eslint:recommended",
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-undef": "error",
+    "prefer-const": "error",
+    "no-var": "error",
+    "no-const-assign": "error",
+    "semi": "off",
+    "no-unused-vars": "warn"
+  }
+}
