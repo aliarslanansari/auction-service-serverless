@@ -12,7 +12,7 @@ async function uploadPicturesToS3(key, body) {
       ContentType: 'image/jpeg',
     })
     .promise()
-  return result
+  return result.Location
 }
 
 export default uploadPicturesToS3
