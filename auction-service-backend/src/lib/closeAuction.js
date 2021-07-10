@@ -15,7 +15,7 @@ export async function closeAuction(auction) {
       ':status': 'CLOSED',
     },
   }
-  const result = await dynamodb.update(params).promise()
+  await dynamodb.update(params).promise()
 
   const {
     title,

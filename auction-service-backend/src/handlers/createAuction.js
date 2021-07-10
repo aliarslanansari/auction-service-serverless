@@ -7,7 +7,7 @@ import createAuctionSchema from '../lib/schemas/createAuctionSchema'
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient()
 
-async function createAuction(event, context) {
+async function createAuction(event /*,context*/) {
   const { title } = event.body
   const { email } = event.requestContext.authorizer
 
