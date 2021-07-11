@@ -6,7 +6,7 @@ import getAuctionsSchema from '../lib/schemas/getAuctionsSchema'
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient()
 
-async function getAuctions(event, context) {
+async function getAuctions(event /*, context*/) {
   const { status } = event.queryStringParameters
   let auctions
 
