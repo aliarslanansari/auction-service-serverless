@@ -1,0 +1,14 @@
+AuctionEventIAM:
+  Effect: Allow
+  Action:
+    - events:PutRule
+    - events:PutTargets
+    - events:DeleteRule
+  Resource: arn:aws:events:eu-west-1:531298258598:rule/closeAuctionRule
+
+AuctionLambdaIAM:
+  Effect: Allow
+  Action:
+    - lambda:AddPermission
+    - lambda:InvokeFunction
+  Resource: ${self:custom.CloseAuctionLambda.arn}

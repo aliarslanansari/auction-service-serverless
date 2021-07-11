@@ -15,16 +15,23 @@ provider:
     AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
     MAIL_QUEUE_URL: ${self:custom.MailQueue.url}
     AUCTIONS_BUCKET_NAME: ${self:custom.AuctionsBucket.name}
+    # CLOSE_AUCTION_LAMBDA_ARN: ${self:custom.CloseAuctionLambda.arn}
+    # CLOSE_AUCTION_LAMBDA_NAME: ${self:custom.CloseAuctionLambda.name}
+    # CLOSE_AUCTION_EVENT_RULE_NAME: ${self:custom.CloseAuctionEventRuleName}
   iamRoleStatements:
     - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
     - ${file(iam/MailQueueIAM.yml):MailQueueIAM}
     - ${file(iam/AuctionsBucketIAM.yml):AuctionsBucketIAM}
+    # - ${file(iam/AuctionEventIAM.yml):AuctionEventIAM}
+    # - ${file(iam/AuctionEventIAM.yml):AuctionLambdaIAM}
 
 resources:
   Resources:
     AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}
     AuctionsBucket: ${file(resources/AuctionsBucket.yml):AuctionsBucket}
     AuctionsBucketPolicy: ${file(resources/AuctionsBucket.yml):AuctionsBucketPolicy}
+    # AuctionEventRule: ${file(resources/AuctionsEvent.yml):AuctionEventRule}
+    # AuctionLambdaPermission: ${file(resources/AuctionsEvent.yml):AuctionLambdaPermission}
 
 functions:
   createAuction:
@@ -72,6 +79,12 @@ functions:
     # events:
     #   - schedule: rate(1 minute)
 
+  # sourceEventBrigdeFunction:
+  #   handler: src/handlers/sourceEventBrigdeFunction.handler
+
+  # targetLambdaFunction:
+  #   handler: src/handlers/targetLambdaFunction.handler
+
 custom:
   MailQueue:
     arn: ${cf:notification-service-${self:provider.stage}.MailQueueArn}
@@ -82,5 +95,9 @@ custom:
     arn: !GetAtt AuctionsTable.Arn
   AuctionsBucket:
     name: auctions-bucket-aliarslan-${self:provider.stage}
+  # CloseAuctionLambda:
+  #   arn: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auction-service-dev-targetLambdaFunction
+  #   name: auction-service-dev-targetLambdaFunction
+  # CloseAuctionEventRuleName: closeAuctionRule
   bundle:
     linting: false

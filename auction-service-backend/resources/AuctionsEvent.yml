@@ -1,0 +1,15 @@
+AuctionLambdaPermission:
+  Type: AWS::Lambda::Permission
+  Properties:
+    Action: lambda:InvokeFunction
+    FunctionName: ${self:custom.CloseAuctionLambda.name}
+    Principal: !Ref 'AWS::AccountId'
+
+AuctionEventRule:
+  Type: AWS::Events::Rule
+  Properties:
+    Description: 'ScheduledRule'
+    ScheduleExpression: 'rate(1 minutes)'
+    Targets:
+      - Arn: ${self:custom.CloseAuctionLambda.arn}
+        Id: ${self:custom.CloseAuctionEventRuleName}-target
