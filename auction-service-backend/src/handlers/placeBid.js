@@ -6,7 +6,7 @@ import placeBidSchema from '../lib/schemas/placeBidSchema'
 import { getAuctionById } from './getAuction'
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient()
-let cached = 0
+
 async function placeBid(event, context) {
   const { email } = event.requestContext.authorizer
   let updatedAuction
@@ -15,12 +15,19 @@ async function placeBid(event, context) {
 
   const auction = await getAuctionById(id)
 
-  if (email === auction.highestBid.bidder) {
-    throw new createErrors.Forbidden(`You are already the highest bidder!`)
+  const now = new Date()
+  const endDate = new Date(auction.endingAt)
+
+  if (now.getTime() > endDate.getTime()) {
+    throw new createErrors.Forbidden(`You cannot bid on a closed auction!`)
   }
 
   if (email === auction.seller) {
     throw new createErrors.Forbidden(`You cannot bid on your own auctions!`)
+  }
+
+  if (email === auction.highestBid.bidder) {
+    throw new createErrors.Forbidden(`You are already the highest bidder!`)
   }
 
   if (auction.status === 'CLOSED') {
